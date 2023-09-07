@@ -8,7 +8,7 @@ android {
     compileSdk = 33
 
     androidResources {
-        generateLocaleConfig = true
+        generateLocaleConfig = true //add this for  locale
     }
 
     defaultConfig {
@@ -16,7 +16,7 @@ android {
         minSdk = 24
         versionCode = 1
         versionName = "1.0"
-        resourceConfigurations.plus(listOf("ta", "en", "hi","ml"))
+        resourceConfigurations.plus(listOf("ta", "en", "hi","ml")) //add the locale tags
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
