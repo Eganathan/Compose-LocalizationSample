@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">LocalizationSample</string>
-    <string name="hello_world">Welcome!</string>
+    <string name="hello_world">This is a Localization Test app</string>
 
     <string name="tamil" translatable="false">தமிழ்</string>
     <string name="english" translatable="false">English</string>
     <string name="hindi" translatable="false">हिंदी</string>
+    <string name="malayalam" translatable="false">മലയാളം</string>
 </resources>

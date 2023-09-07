@@ -18,9 +18,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,6 +37,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.LocaleListCompat
 import com.eganathan.localizationsample.ui.theme.LocalizationSampleTheme
@@ -55,6 +63,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LangaugeSelectionComponent() {
     val context = LocalContext.current
@@ -66,13 +75,20 @@ fun LangaugeSelectionComponent() {
     AppCompatDelegate.setApplicationLocales(appLocale)
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 25.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = stringResource(id = R.string.hello_world))
-
-        Row(
+        Text(
+            text = stringResource(id = R.string.hello_world),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.heightIn(50.dp))
+        FlowRow(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(onClick = {
@@ -94,6 +110,13 @@ fun LangaugeSelectionComponent() {
                 localeSelection(context = context, localeTag = currentLocale.value)
             }) {
                 Text(text = stringResource(id = R.string.hindi))
+            }
+
+            Button(onClick = {
+                currentLocale.value = Locale("ml").toLanguageTag()
+                localeSelection(context = context, localeTag = currentLocale.value)
+            }) {
+                Text(text = stringResource(id = R.string.malayalam))
             }
         }
     }

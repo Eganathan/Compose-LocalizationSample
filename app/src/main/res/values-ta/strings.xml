@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LocalizationSample</string>
-    <string name="hello_world">வணக்கம்!</string>
+    <string name="app_name">உள்ளூர்மயமாக்கல் மாதிரி</string>
+    <string name="hello_world">இது ஒரு உள்ளூர்மயமாக்கல் சோதனை பயன்பாடாகும்</string>
 </resources>
