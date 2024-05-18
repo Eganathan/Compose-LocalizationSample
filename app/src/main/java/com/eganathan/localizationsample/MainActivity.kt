@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,13 +50,19 @@ import java.util.Locale
 
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+            Language.configureLocaleOnStartForDevicesLowerThanTiramisu(this)
+
         super.onCreate(savedInstanceState)
         setContent {
             LocalizationSampleTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     LangaugeSelectionComponent()
                 }
@@ -69,7 +77,7 @@ fun LangaugeSelectionComponent() {
     val context = LocalContext.current
     val deviceLocale = context.resources.configuration.locales.get(0)
 
-    val currentLocale = remember { mutableStateOf(deviceLocale.toLanguageTag()) }
+    val currentLocale = remember { mutableStateOf(Language.getCurrentLanguage(context)) }
 
     val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("en")
     AppCompatDelegate.setApplicationLocales(appLocale)
@@ -81,58 +89,34 @@ fun LangaugeSelectionComponent() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
             text = stringResource(id = R.string.hello_world),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold
         )
+
         Spacer(modifier = Modifier.heightIn(50.dp))
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            Button(onClick = {
-                currentLocale.value = Locale("en").toLanguageTag()
-                localeSelection(context = context, localeTag = currentLocale.value)
-            }) {
-                Text(text = stringResource(id = R.string.english))
-            }
-
-            Button(onClick = {
-                currentLocale.value = Locale("ta").toLanguageTag()
-                localeSelection(context = context, localeTag = currentLocale.value)
-            }) {
-                Text(text = stringResource(id = R.string.tamil))
-            }
-
-            Button(onClick = {
-                currentLocale.value = Locale("hi").toLanguageTag()
-                localeSelection(context = context, localeTag = currentLocale.value)
-            }) {
-                Text(text = stringResource(id = R.string.hindi))
-            }
-
-            Button(onClick = {
-                currentLocale.value = Locale("ml").toLanguageTag()
-                localeSelection(context = context, localeTag = currentLocale.value)
-            }) {
-                Text(text = stringResource(id = R.string.malayalam))
+            items(Language.allowedLocales) { language ->
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp),
+                    enabled = currentLocale.value != language,
+                    onClick = {
+                        currentLocale.value = language
+                        Language.setLocale(context = context, localeCode = language.code)
+                    },
+                    content = {
+                        Text(text = stringResource(id = language.titleRes))
+                    })
             }
         }
-    }
-}
-
-object constants {
-    val availableLang: List<String> = listOf("en", "ta", "hi")
-}
-
-fun localeSelection(context: Context, localeTag: String) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        context.getSystemService(LocaleManager::class.java).applicationLocales =
-            LocaleList.forLanguageTags(localeTag)
-    } else {
-        AppCompatDelegate.setApplicationLocales(
-            LocaleListCompat.forLanguageTags(localeTag)
-        )
     }
 }

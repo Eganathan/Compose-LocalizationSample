@@ -6,4 +6,5 @@
     <string name="english" translatable="false">English</string>
     <string name="hindi" translatable="false">हिंदी</string>
     <string name="malayalam" translatable="false">മലയാളം</string>
+    <string name="french" translatable="false">français</string>
 </resources>
